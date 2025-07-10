@@ -4,7 +4,13 @@ import torch
 model_id = "stanford-crfm/BioMedLM"
 
 tokenizer = AutoTokenizer.from_pretrained(model_id)
-model = AutoModelForCausalLM.from_pretrained(model_id, torch_dtype=torch.float32, device_map="auto")
+model = AutoModelForCausalLM.from_pretrained(
+    model_id, 
+    torch_dtype=torch.float32, 
+    device_map="auto",
+    low_cpu_mem_usage=True,
+    offload_folder='./offload'
+    )
 
 raw_case = input("Enter patient case description:\n")
 

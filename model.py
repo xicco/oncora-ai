@@ -3,7 +3,7 @@ from transformers import AutoTokenizer, AutoModelForCausalLM
 model_id = "stanford-crfm/BioMedLM"
 
 tokenizer = AutoTokenizer.from_pretrained(model_id)
-model = AutoModelForCausalLM.from_pretrained(model_id, torch_dtype="auto", device_map="auto")
+model = AutoModelForCausalLM.from_pretrained(model_id, torch_dtype=torch.float16, device_map="auto")
 
 raw_case = input("Enter patient case description:\n")
 

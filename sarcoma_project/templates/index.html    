@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>BioGPT Medical Q&A</title>
+    <style>
+        body { font-family: sans-serif; max-width: 600px; margin: auto; padding-top: 50px; }
+        input[type=text] { width: 100%; padding: 12px; margin-bottom: 10px; }
+        button { padding: 10px 20px; font-size: 16px; }
+        .answer { margin-top: 20px; padding: 15px; background: #f3f3f3; border-left: 4px solid #007bff; }
+    </style>
+</head>
+<body>
+    <h1>Ask BioGPT</h1>
+    <form method="POST">
+        <input type="text" name="question" placeholder="Enter your medical question" required>
+        <button type="submit">Submit</button>
+    </form>
+
+    {% if answer %}
+    <div class="answer">
+        <strong>Answer:</strong> {{ answer }}
+    </div>
+    {% endif %}
+</body>
+</html>

@@ -3,14 +3,14 @@ import torch
 
 model_id = "stanford-crfm/BioMedLM"
 
+device = "cpu"
+
 tokenizer = AutoTokenizer.from_pretrained(model_id)
 model = AutoModelForCausalLM.from_pretrained(
     model_id, 
     torch_dtype=torch.float32, 
-    device_map="auto",
-    low_cpu_mem_usage=True,
     offload_folder='./offload'
-    )
+    ).to(device)
 
 raw_case = input("Enter patient case description:\n")
 
@@ -23,19 +23,25 @@ prompt = (
     "What would be your clinical insight or recommended next step?\n"
 )
 
-model_inputs = tokenizer(prompt, return_tensors="pt").to(model.device)
+model_inputs = tokenizer(prompt, return_tensors="pt").to(device)
+
+print("Generating response...")
 
 with torch.no_grad():
     outputs = model.generate(
         **model_inputs,
-        max_new_tokens=200,
-        temperature=0.7,
-        top_p=0.9,
-        do_sample=True
+        max_new_tokens=100,
+        temperature=0.3,
+        top_p=0.8,
+        num_beams=3
+        #do_sample=True
     )
 
-response = tokenizer.decode(outputs[0], skip_special_tokens=True)
-generated_text = response[len(prompt):].strip()
+print(outputs)
+
+generated_ids = outputs[0][len(model_inputs["input_ids"][0]):]  
+
+generated_text = tokenizer.decode(generated_ids, skip_special_tokens=True)
 
 print("\n🧠 BioMedLM's Response:\n")
 print(generated_text)
